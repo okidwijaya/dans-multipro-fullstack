@@ -1,5 +1,16 @@
 const pool = require('../config/db');
 
+const getAllTransactionModel = () => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM transaction';
+        pool.query(query, (err, result) => {
+            if(err)return reject({status: 500, err});
+            if(result.length == 0) return reject({status: 404, result});
+            resolve({ status: 200, result: result.length ? result : [] });
+        })
+    })
+}
+
 const addTransactionModel = (body) => {
     const user = body.user_id;
     const product = JSON.stringify(body.products_detail);
@@ -56,4 +67,5 @@ const addTransactionModel = (body) => {
 
 module.exports = {
     addTransactionModel,
+    getAllTransactionModel
 }
